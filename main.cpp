@@ -77,6 +77,14 @@ public:
         delete grid[row][col];
         grid[row][col] = nullptr;
     }
+    Item* getItem(int row, int col) {
+        if(!isValidPosition(row,col))
+        {
+            return nullptr;
+        }
+
+        return grid[row][col];
+    }
     void resizeEquipment(int newRows, int newCols) {
         Item*** newGrid = new Item**[newRows];
         for(int i = 0; i < newRows; i++) {
@@ -151,11 +159,11 @@ public:
         equipment.display();
     }
 
-    void equipArmor(Item* item) { armor = item; }
-    void equipTrousers(Item* item) { trousers = item; }
-    void equipBoots(Item* item) { boots = item; }
-    void equipMainWeapon(Item* item) { mainWeapon = item; }
-    void equipSideWeapon(Item* item) { sideWeapon = item; }
+    void equipArmor(int row, int col) { armor = equipment.getItem(row, col); }
+    void equipTrousers(int row, int col) { trousers = equipment.getItem(row, col); }
+    void equipBoots(int row, int col) { boots = equipment.getItem(row,col); }
+    void equipMainWeapon(int row, int col) { mainWeapon = equipment.getItem(row, col); }
+    void equipSideWeapon(int row, int col) { sideWeapon = equipment.getItem(row, col); }
 
     void addItemToInventory(int row, int col, const string& itemName) {
         equipment.addItem(row, col, itemName);
@@ -180,19 +188,19 @@ int main()
 
     player.displayEquipment();
 
-    // Przykład dodawania złota i wyświetlenia
+
     player.addGold(100);
 
 
-    // Przykład dodawania przedmiotu do ekwipunku
+
     player.addItemToInventory(0, 0, "Helmet");
     player.displayEquipment();
 
-    // Przykład wyposażenia postaci w przedmioty
+
     Item* helmet = new Item("Steel Helmet");
     Item* sword = new Item("Steel Sword");
-    player.equipArmor(helmet);
-    player.equipMainWeapon(sword);
+    player.equipArmor(0,0);
+    player.equipMainWeapon(2,2);
     player.displayEquipment();
 
     return 0;
