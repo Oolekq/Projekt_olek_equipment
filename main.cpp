@@ -38,8 +38,8 @@ public:
                 delete grid[i][j];
             }
         }
-        for(int j = 0; j < rows; j++) {
-            delete[] grid[j];
+        for(int i = 0; i < rows; i++) {
+            delete[] grid[i];
         }
         delete[] grid;
     }
@@ -78,8 +78,7 @@ public:
         grid[row][col] = nullptr;
     }
     Item* getItem(int row, int col) {
-        if(!isValidPosition(row,col))
-        {
+        if(!isValidPosition(row,col)) {
             return nullptr;
         }
 
@@ -101,7 +100,6 @@ public:
             }
         }
 
-        // Usuwanie starej tablicy
         for(int i = 0; i < rows; i++) {
             delete[] grid[i];
         }
@@ -161,7 +159,7 @@ public:
 
     void equipArmor(int row, int col) { armor = equipment.getItem(row, col); }
     void equipTrousers(int row, int col) { trousers = equipment.getItem(row, col); }
-    void equipBoots(int row, int col) { boots = equipment.getItem(row,col); }
+    void equipBoots(int row, int col) { boots = equipment.getItem(row, col); }
     void equipMainWeapon(int row, int col) { mainWeapon = equipment.getItem(row, col); }
     void equipSideWeapon(int row, int col) { sideWeapon = equipment.getItem(row, col); }
 
@@ -180,28 +178,109 @@ public:
     int getGold() const {
         return gold;
     }
+
+    void swapItemsInInventory(int row1, int col1, int row2, int col2) {
+        equipment.swapItems(row1, col1, row2, col2);
+    }
+
+    void deleteItemFromInventory(int row, int col) {
+        equipment.deleteItem(row, col);
+    }
+
+    void resizeInventory(int newRows, int newCols) {
+        equipment.resizeEquipment(newRows, newCols);
+    }
 };
 
-int main()
-{
+int main() {
     Player player;
+    int choice, row, col, row2, col2, amount, newRows, newCols;
+    string itemName;
 
-    player.displayEquipment();
+    while (true) {
+        cout << "\nMenu:\n";
+        cout << "1. Display Equipment\n";
+        cout << "2. Add Gold\n";
+        cout << "3. Add Item to Inventory\n";
+        cout << "4. Equip Armor\n";
+        cout << "5. Equip Trousers\n";
+        cout << "6. Equip Boots\n";
+        cout << "7. Equip Main Weapon\n";
+        cout << "8. Equip Side Weapon\n";
+        cout << "9. Swap Items in Inventory\n";
+        cout << "10. Delete Item from Inventory\n";
+        cout << "11. Resize Inventory\n";
+        cout << "12. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-
-    player.addGold(100);
-
-
-
-    player.addItemToInventory(0, 0, "Helmet");
-    player.displayEquipment();
-
-
-    Item* helmet = new Item("Steel Helmet");
-    Item* sword = new Item("Steel Sword");
-    player.equipArmor(0,0);
-    player.equipMainWeapon(2,2);
-    player.displayEquipment();
+        switch (choice) {
+        case 1:
+            player.displayEquipment();
+            break;
+        case 2:
+            cout << "Enter amount of gold to add: ";
+            cin >> amount;
+            player.addGold(amount);
+            player.displayGold();
+            break;
+        case 3:
+            cout << "Enter row and column to add item: ";
+            cin >> row >> col;
+            cout << "Enter item name: ";
+            cin >> itemName;
+            player.addItemToInventory(row, col, itemName);
+            break;
+        case 4:
+            cout << "Enter row and column to equip armor: ";
+            cin >> row >> col;
+            player.equipArmor(row, col);
+            break;
+        case 5:
+            cout << "Enter row and column to equip trousers: ";
+            cin >> row >> col;
+            player.equipTrousers(row, col);
+            break;
+        case 6:
+            cout << "Enter row and column to equip boots: ";
+            cin >> row >> col;
+            player.equipBoots(row, col);
+            break;
+        case 7:
+            cout << "Enter row and column to equip main weapon: ";
+            cin >> row >> col;
+            player.equipMainWeapon(row, col);
+            break;
+        case 8:
+            cout << "Enter row and column to equip side weapon: ";
+            cin >> row >> col;
+            player.equipSideWeapon(row, col);
+            break;
+        case 9:
+            cout << "Enter row and column of first item: ";
+            cin >> row >> col;
+            cout << "Enter row and column of second item: ";
+            cin >> row2 >> col2;
+            player.swapItemsInInventory(row, col, row2, col2);
+            break;
+        case 10:
+            cout << "Enter row and column to delete item: ";
+            cin >> row >> col;
+            player.deleteItemFromInventory(row, col);
+            break;
+        case 11:
+            cout << "Enter new number of rows: ";
+            cin >> newRows;
+            cout << "Enter new number of columns: ";
+            cin >> newCols;
+            player.resizeInventory(newRows, newCols);
+            break;
+        case 12:
+            return 0;
+        default:
+            cout << "Invalid choice! Please try again." << endl;
+        }
+    }
 
     return 0;
 }
